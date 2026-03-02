@@ -1,0 +1,56 @@
+{
+  "project": {
+    "name": "gitsense-target",
+    "path": "./sample-repo",
+    "primary_language": "C++"
+  },
+  "metrics": {
+    "total_files": 42,
+    "source_files": 20,
+    "lines_of_code": 3500,
+    "comment_lines": 450,
+    "blank_lines": 300,
+    "code_quality_score": 85
+  },
+  "architecture": {
+    "god_objects_detected": 1,
+    "deep_nesting_warnings": 2
+  },
+  "security_issues": [
+    {
+      "id": "SEC-001",
+      "severity": "High",
+      "file": "src/main.cpp",
+      "line": 150,
+      "description": "Hardcoded AWS secret key detected.",
+      "reachable": true
+    },
+    {
+      "id": "SEC-002",
+      "severity": "Medium",
+      "file": "src/utils.cpp",
+      "line": 42,
+      "description": "Unsafe usage of strcpy().",
+      "reachable": false
+    }
+  ],
+  "documentation": {
+    "readme": true,
+    "license": true,
+    "contributing": false,
+    "completeness_score": 66
+  },
+  "license": {
+    "type": "MIT",
+    "compatible": true
+  },
+  "git_history": {
+    "bus_factor": 1,
+    "active_maintainers": 1
+  },
+  "recommendations": [
+    "Refactor src/utils.cpp to remove strcpy() usages.",
+    "Eliminate hardcoded AWS secrets in src/main.cpp.",
+    "Add a CONTRIBUTING.md file to improve community onboarding."
+  ]
+}
