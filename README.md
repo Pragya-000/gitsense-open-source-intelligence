@@ -1,5 +1,6 @@
 # GitSense – Open Source Intelligence Platform
 
+<<<<<<< HEAD
 **"GitSense: X-Ray Vision for Open Source Ecosystems"**
 
 GitSense is a high-performance, fully offline, AI-powered system that analyzes open-source repositories to evaluate code quality, security patterns, architecture smells, and dependency risks. Developed as part of **FOSS Hack 2026**.
@@ -40,3 +41,32 @@ To build an intelligence layer over open-source repositories that helps contribu
 - Machine learning/Local LLM integration for auto-remediation patches.
 - Semantic code similarity search powered by local vector embeddings.
 - Full Git History analysis (Bus Factor calculation, maintainer heatmaps).
+=======
+GitSense is an intelligent system that analyzes open-source repositories to evaluate code quality, security, and community health.
+
+## 🚀 Features
+- Analyze a GitHub repository using its URL
+- Count number of files and lines of code
+- Detect programming languages used
+- Evaluate README and documentation quality
+- Generate a basic project health score
+
+## 🛠 Tech Stack
+- C++
+- Git
+- File system analysis
+
+## 🎯 Goal
+To build an intelligence layer over open-source repositories that helps contributors and maintainers understand project quality and risks.
+
+## 📈 Future Scope
+- Security vulnerability detection
+- Dependency analysis
+- Machine learning based project health prediction
+- Web dashboard
+
+---
+
+Developed as part of FOSS Hack 2026.
+>>>>>>> 21440a24069c7ea8aa3c5ec7ee9266bb2ede47ee
+Minor Update
