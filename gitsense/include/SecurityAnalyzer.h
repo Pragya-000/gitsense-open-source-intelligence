@@ -7,6 +7,7 @@ struct SecurityIssue {
   int line;
   std::string description;
   std::string severity;
+  std::string rawLine;
 };
 
 class SecurityAnalyzer {

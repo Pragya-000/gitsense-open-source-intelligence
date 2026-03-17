@@ -1,3 +1,4 @@
+#include "AIRemediation.h"
 #include "ReportGenerator.h"
 #include <fstream>
 #include <iostream>
@@ -30,7 +31,10 @@ void ReportGenerator::generateJsonReport(const std::string &outputPath) const {
     out << "      \"file\": \"" << issues[i].file << "\",\n";
     out << "      \"line\": " << issues[i].line << ",\n";
     out << "      \"description\": \"" << issues[i].description << "\",\n";
-    out << "      \"severity\": \"" << issues[i].severity << "\"\n";
+    out << "      \"severity\": \"" << issues[i].severity << "\",\n";
+    
+    std::string safeLine = AIRemediation::generateSaferCode(issues[i].rawLine);
+    out << "      \"ai_remediation\": \"" << safeLine << "\"\n";
     out << "    }" << (i < issues.size() - 1 ? "," : "") << "\n";
   }
   out << "  ]\n";
@@ -56,6 +60,11 @@ void ReportGenerator::generatePrettyReport() const {
   for (const auto &issue : secAnalyzer.getIssues()) {
     std::cout << "  [" << issue.severity << "] " << issue.file << ":"
               << issue.line << " -> " << issue.description << "\n";
+    
+    std::string safeCode = AIRemediation::generateSaferCode(issue.rawLine);
+    // Trim leading whitespaces for clean terminal output
+    safeCode.erase(0, safeCode.find_first_not_of(" \t\r\n")); 
+    std::cout << "      ✨ AI Suggestion: " << safeCode << "\n";
   }
   std::cout << "================================================\n\n";
 }

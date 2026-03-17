@@ -16,12 +16,11 @@ void SecurityAnalyzer::analyzeFile(const std::string &path) {
   while (std::getline(file, line)) {
     lineNum++;
 
-    // Hardcoded secret heuristic
     if (line.find("API_KEY") != std::string::npos ||
         line.find("password =") != std::string::npos ||
         line.find("SECRET") != std::string::npos) {
       issues.push_back(
-          {path, lineNum, "Possible hardcoded secret detected.", "High"});
+          {path, lineNum, "Possible hardcoded secret detected.", "High", line});
     }
 
     // Unsafe C functions
@@ -29,12 +28,12 @@ void SecurityAnalyzer::analyzeFile(const std::string &path) {
         line.find("gets(") != std::string::npos ||
         line.find("sprintf(") != std::string::npos) {
       issues.push_back(
-          {path, lineNum, "Unsafe C memory function detected.", "Medium"});
+          {path, lineNum, "Unsafe C memory function detected.", "Medium", line});
     }
 
     // Dangerous system calls
     if (line.find("system(") != std::string::npos) {
-      issues.push_back({path, lineNum, "Usage of system() call.", "High"});
+      issues.push_back({path, lineNum, "Usage of system() call.", "High", line});
     }
   }
 }

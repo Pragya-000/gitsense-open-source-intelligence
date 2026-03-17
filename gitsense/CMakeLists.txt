@@ -22,6 +22,7 @@ set(SOURCES
     src/LicenseAnalyzer.cpp
     src/DependencyAnalyzer.cpp
     src/ReportGenerator.cpp
+    src/AIRemediation.cpp
 )
 
 # Create executable
