@@ -40,7 +40,7 @@ void FileScanner::scan(const std::string &path) {
   if ((dir = opendir(path.c_str())) != NULL) {
     while ((ent = readdir(dir)) != NULL) {
       std::string name = ent->d_name;
-      if (name == "." || name == "..")
+      if (name == "." || name == ".." || name == ".git" || name == ".vscode" || name == "build" || name == "node_modules")
         continue;
 
       std::string fullPath = path + "/" + name;
