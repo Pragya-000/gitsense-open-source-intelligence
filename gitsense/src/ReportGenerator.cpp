@@ -3,11 +3,11 @@
 #include <fstream>
 #include <iostream>
 
-
 ReportGenerator::ReportGenerator(const FileScanner &fs,
                                  const CodeQualityAnalyzer &cqa,
-                                 const SecurityAnalyzer &sa)
-    : fileScanner(fs), cqAnalyzer(cqa), secAnalyzer(sa) {}
+                                 const SecurityAnalyzer &sa,
+                                 const GitHistoryAnalyzer &gha)
+    : fileScanner(fs), cqAnalyzer(cqa), secAnalyzer(sa), gitAnalyzer(gha) {}
 
 void ReportGenerator::generateJsonReport(const std::string &outputPath) const {
   std::cout << "[ReportGenerator] Writing JSON report to " << outputPath
@@ -22,6 +22,19 @@ void ReportGenerator::generateJsonReport(const std::string &outputPath) const {
   out << "    \"source_files\": " << fileScanner.getSourceFilesCount() << ",\n";
   out << "    \"lines_of_code\": " << fileScanner.getLinesOfCode() << ",\n";
   out << "    \"code_quality_score\": " << cqAnalyzer.getScore() << "\n";
+  out << "  },\n";
+
+  out << "  \"git_history\": {\n";
+  out << "    \"total_commits\": " << gitAnalyzer.getTotalCommits() << ",\n";
+  out << "    \"top_contributors\": [\n";
+  const auto &contributors = gitAnalyzer.getTopContributors();
+  for (size_t i = 0; i < contributors.size(); ++i) {
+    out << "      {\n";
+    out << "        \"name\": \"" << contributors[i].name << "\",\n";
+    out << "        \"commits\": " << contributors[i].commits << "\n";
+    out << "      }" << (i < contributors.size() - 1 ? "," : "") << "\n";
+  }
+  out << "    ]\n";
   out << "  },\n";
 
   out << "  \"security_issues\": [\n";
@@ -49,6 +62,15 @@ void ReportGenerator::generatePrettyReport() const {
   std::cout << "Files Scanned: " << fileScanner.getTotalFiles() << "\n";
   std::cout << "Source Files:  " << fileScanner.getSourceFilesCount() << "\n";
   std::cout << "Lines of Code: " << fileScanner.getLinesOfCode() << "\n";
+  std::cout << "------------------------------------------------\n";
+  std::cout << "Top Contributors:\n";
+  const auto &contributors = gitAnalyzer.getTopContributors();
+  for(const auto& c : contributors) {
+      std::cout << "  - " << c.name << " (" << c.commits << " commits)\n";
+  }
+  if (contributors.empty()) {
+      std::cout << "  (No git history found)\n";
+  }
   std::cout << "------------------------------------------------\n";
   std::cout << "Code Quality Score: " << cqAnalyzer.getScore() << "/100\n";
   std::cout << "  - TODOs Found: " << cqAnalyzer.getTodos() << "\n";

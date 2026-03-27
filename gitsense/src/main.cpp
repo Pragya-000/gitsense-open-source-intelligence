@@ -2,6 +2,7 @@
 #include "FileScanner.h"
 #include "ReportGenerator.h"
 #include "SecurityAnalyzer.h"
+#include "GitHistoryAnalyzer.h"
 #include <iostream>
 #include <string>
 #include <vector>
@@ -53,7 +54,10 @@ int main(int argc, char *argv[]) {
     SecurityAnalyzer secAnalyzer;
     secAnalyzer.analyze(scanner.getSourceFiles());
 
-    ReportGenerator reportGen(scanner, cqAnalyzer, secAnalyzer);
+    GitHistoryAnalyzer gitAnalyzer;
+    gitAnalyzer.analyze(target);
+
+    ReportGenerator reportGen(scanner, cqAnalyzer, secAnalyzer, gitAnalyzer);
 
     // Handle trailing report options if provided inline
     if (args.size() > 2 && args[2] == "report") {
