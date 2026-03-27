@@ -13,11 +13,10 @@ struct SecurityIssue {
 class SecurityAnalyzer {
 public:
   SecurityAnalyzer();
-  void analyze(const std::vector<std::string> &files);
+  void analyzeLines(const std::string &path, const std::vector<std::string> &lines);
   const std::vector<SecurityIssue> &getIssues() const;
   int getIssuesCount() const;
 
 private:
   std::vector<SecurityIssue> issues;
-  void analyzeFile(const std::string &path);
 };

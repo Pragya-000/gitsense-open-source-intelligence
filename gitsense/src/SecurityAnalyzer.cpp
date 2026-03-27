@@ -1,19 +1,12 @@
 #include "SecurityAnalyzer.h"
-#include <fstream>
 #include <iostream>
-
 
 SecurityAnalyzer::SecurityAnalyzer() {}
 
-void SecurityAnalyzer::analyzeFile(const std::string &path) {
-  std::ifstream file(path);
-  if (!file.is_open())
-    return;
-
-  std::string line;
+void SecurityAnalyzer::analyzeLines(const std::string &path, const std::vector<std::string> &lines) {
   int lineNum = 0;
 
-  while (std::getline(file, line)) {
+  for (const auto& line : lines) {
     lineNum++;
 
     if (line.find("API_KEY") != std::string::npos ||
@@ -35,13 +28,6 @@ void SecurityAnalyzer::analyzeFile(const std::string &path) {
     if (line.find("system(") != std::string::npos) {
       issues.push_back({path, lineNum, "Usage of system() call.", "High", line});
     }
-  }
-}
-
-void SecurityAnalyzer::analyze(const std::vector<std::string> &files) {
-  std::cout << "[SecurityAnalyzer] Analyzing security patterns...\n";
-  for (const auto &f : files) {
-    analyzeFile(f);
   }
 }
 

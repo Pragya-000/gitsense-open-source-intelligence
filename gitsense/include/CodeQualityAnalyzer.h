@@ -5,7 +5,7 @@
 class CodeQualityAnalyzer {
 public:
   CodeQualityAnalyzer();
-  void analyze(const std::vector<std::string> &files);
+  void analyzeLines(const std::string &path, const std::vector<std::string> &lines);
   int getScore() const;
   int getTodos() const;
   int getLongFunctions() const;
@@ -16,6 +16,4 @@ private:
   int todosFound = 0;
   int longFunctions = 0;
   int largeFiles = 0;
-
-  void analyzeFile(const std::string &path);
 };

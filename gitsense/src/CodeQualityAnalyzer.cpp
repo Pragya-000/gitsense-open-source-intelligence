@@ -1,21 +1,14 @@
 #include "CodeQualityAnalyzer.h"
-#include <fstream>
 #include <iostream>
-
 
 CodeQualityAnalyzer::CodeQualityAnalyzer() {}
 
-void CodeQualityAnalyzer::analyzeFile(const std::string &path) {
-  std::ifstream file(path);
-  if (!file.is_open())
-    return;
-
-  std::string line;
+void CodeQualityAnalyzer::analyzeLines(const std::string &path, const std::vector<std::string> &lines) {
   int lineCount = 0;
   int currentFunctionLength = 0;
   int braceDepth = 0;
 
-  while (std::getline(file, line)) {
+  for (const auto& line : lines) {
     lineCount++;
 
     if (line.find("TODO") != std::string::npos ||
@@ -50,17 +43,7 @@ void CodeQualityAnalyzer::analyzeFile(const std::string &path) {
   }
 }
 
-void CodeQualityAnalyzer::analyze(const std::vector<std::string> &files) {
-  std::cout << "[CodeQualityAnalyzer] Analyzing " << files.size()
-            << " files for code quality...\n";
-  for (const auto &f : files) {
-    analyzeFile(f);
-  }
-  if (score < 0)
-    score = 0;
-}
-
-int CodeQualityAnalyzer::getScore() const { return score; }
+int CodeQualityAnalyzer::getScore() const { return (score < 0) ? 0 : score; }
 int CodeQualityAnalyzer::getTodos() const { return todosFound; }
 int CodeQualityAnalyzer::getLongFunctions() const { return longFunctions; }
 int CodeQualityAnalyzer::getLargeFiles() const { return largeFiles; }

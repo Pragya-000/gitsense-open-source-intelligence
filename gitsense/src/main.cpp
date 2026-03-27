@@ -5,6 +5,7 @@
 #include "GitHistoryAnalyzer.h"
 #include "ArchitectureAnalyzer.h"
 #include <iostream>
+#include <fstream>
 #include <string>
 #include <vector>
 
@@ -50,16 +51,27 @@ int main(int argc, char *argv[]) {
     scanner.scan(target);
 
     CodeQualityAnalyzer cqAnalyzer;
-    cqAnalyzer.analyze(scanner.getSourceFiles());
-
     SecurityAnalyzer secAnalyzer;
-    secAnalyzer.analyze(scanner.getSourceFiles());
+    ArchitectureAnalyzer archAnalyzer;
+
+    std::cout << "[Pipeline] Loading source code directly into RAM for Single-Pass Analysis...\n";
+    for (const auto& filePath : scanner.getSourceFiles()) {
+        std::ifstream file(filePath);
+        if (!file.is_open()) continue;
+
+        std::vector<std::string> lines;
+        std::string line;
+        while (std::getline(file, line)) {
+            lines.push_back(line);
+        }
+
+        cqAnalyzer.analyzeLines(filePath, lines);
+        secAnalyzer.analyzeLines(filePath, lines);
+        archAnalyzer.analyzeLines(filePath, lines);
+    }
 
     GitHistoryAnalyzer gitAnalyzer;
     gitAnalyzer.analyze(target);
-
-    ArchitectureAnalyzer archAnalyzer;
-    archAnalyzer.analyze(scanner.getSourceFiles());
 
     ReportGenerator reportGen(scanner, cqAnalyzer, secAnalyzer, gitAnalyzer, archAnalyzer);
 

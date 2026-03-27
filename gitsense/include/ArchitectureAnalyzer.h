@@ -11,7 +11,7 @@ struct ArchSmell {
 class ArchitectureAnalyzer {
 public:
   ArchitectureAnalyzer();
-  void analyze(const std::vector<std::string> &files);
+  void analyzeLines(const std::string &path, const std::vector<std::string> &lines);
   const std::vector<ArchSmell>& getSmells() const;
 
 private:
