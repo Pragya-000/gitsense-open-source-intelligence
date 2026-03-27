@@ -6,8 +6,9 @@
 ReportGenerator::ReportGenerator(const FileScanner &fs,
                                  const CodeQualityAnalyzer &cqa,
                                  const SecurityAnalyzer &sa,
-                                 const GitHistoryAnalyzer &gha)
-    : fileScanner(fs), cqAnalyzer(cqa), secAnalyzer(sa), gitAnalyzer(gha) {}
+                                 const GitHistoryAnalyzer &gha,
+                                 const ArchitectureAnalyzer &aa)
+    : fileScanner(fs), cqAnalyzer(cqa), secAnalyzer(sa), gitAnalyzer(gha), archAnalyzer(aa) {}
 
 void ReportGenerator::generateJsonReport(const std::string &outputPath) const {
   std::cout << "[ReportGenerator] Writing JSON report to " << outputPath
@@ -36,6 +37,17 @@ void ReportGenerator::generateJsonReport(const std::string &outputPath) const {
   }
   out << "    ]\n";
   out << "  },\n";
+
+  out << "  \"architecture_smells\": [\n";
+  const auto &smells = archAnalyzer.getSmells();
+  for (size_t i = 0; i < smells.size(); ++i) {
+    out << "    {\n";
+    out << "      \"file\": \"" << smells[i].file << "\",\n";
+    out << "      \"type\": \"" << smells[i].type << "\",\n";
+    out << "      \"details\": \"" << smells[i].details << "\"\n";
+    out << "    }" << (i < smells.size() - 1 ? "," : "") << "\n";
+  }
+  out << "  ],\n";
 
   out << "  \"security_issues\": [\n";
   const auto &issues = secAnalyzer.getIssues();
@@ -76,6 +88,16 @@ void ReportGenerator::generatePrettyReport() const {
   std::cout << "  - TODOs Found: " << cqAnalyzer.getTodos() << "\n";
   std::cout << "  - Long Functions: " << cqAnalyzer.getLongFunctions() << "\n";
   std::cout << "  - Large Files: " << cqAnalyzer.getLargeFiles() << "\n";
+  std::cout << "------------------------------------------------\n";
+  std::cout << "Architecture Smells:\n";
+  const auto &smells = archAnalyzer.getSmells();
+  if (smells.empty()) {
+    std::cout << "  No architectural smells detected.\n";
+  } else {
+    for(const auto& s : smells) {
+        std::cout << "  [" << s.type << "] " << s.file << " -> " << s.details << "\n";
+    }
+  }
   std::cout << "------------------------------------------------\n";
   std::cout << "Security Issues Found: " << secAnalyzer.getIssuesCount()
             << "\n";
