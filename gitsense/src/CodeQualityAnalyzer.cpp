@@ -14,7 +14,6 @@ void CodeQualityAnalyzer::analyzeLines(const std::string &path, const std::vecto
     if (line.find("TODO") != std::string::npos ||
         line.find("FIXME") != std::string::npos) {
       todosFound++;
-      score--;
     }
 
     // Simple brace heuristic for function length
@@ -24,7 +23,6 @@ void CodeQualityAnalyzer::analyzeLines(const std::string &path, const std::vecto
       else if (c == '}') {
         if (braceDepth == 1 && currentFunctionLength > 50) {
           longFunctions++;
-          score -= 2;
         }
         if (braceDepth > 0)
           braceDepth--;
@@ -39,11 +37,25 @@ void CodeQualityAnalyzer::analyzeLines(const std::string &path, const std::vecto
 
   if (lineCount > 500) {
     largeFiles++;
-    score -= 5;
   }
+  
+  totalLines += lineCount;
+  totalFiles++;
 }
 
-int CodeQualityAnalyzer::getScore() const { return (score < 0) ? 0 : score; }
+int CodeQualityAnalyzer::getScore() const { 
+  if (totalLines == 0 || totalFiles == 0) return 100;
+  
+  // Predictable ratios instead of absolute subtraction
+  float todoPenalty = (static_cast<float>(todosFound) / totalLines) * 500.0f;
+  float funcPenalty = (static_cast<float>(longFunctions) / totalLines) * 2000.0f;
+  float filePenalty = (static_cast<float>(largeFiles) / totalFiles) * 50.0f;
+  
+  int finalScore = 100 - static_cast<int>(todoPenalty + funcPenalty + filePenalty);
+  if (finalScore < 0) return 0;
+  if (finalScore > 100) return 100;
+  return finalScore;
+}
 int CodeQualityAnalyzer::getTodos() const { return todosFound; }
 int CodeQualityAnalyzer::getLongFunctions() const { return longFunctions; }
 int CodeQualityAnalyzer::getLargeFiles() const { return largeFiles; }

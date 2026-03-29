@@ -4,6 +4,7 @@
 #include "SecurityAnalyzer.h"
 #include "GitHistoryAnalyzer.h"
 #include "ArchitectureAnalyzer.h"
+#include "LocalServer.h"
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -17,8 +18,10 @@ void printHelp() {
       << "  gitsense scan <path>                   Scan a local directory\n";
   std::cout
       << "  gitsense scan <path> report --json     Output results as JSON\n";
-  std::cout << "  gitsense scan <path> report --pretty   Output pretty "
-               "terminal results\n";
+  std::cout
+      << "  gitsense scan <path> report --pretty   Output pretty "
+         "terminal results\n";
+  std::cout << "  gitsense serve                     Start the Local Server on port 8080\n";
   std::cout
       << "  gitsense --help                        Show this help message\n";
 }
@@ -34,6 +37,13 @@ int main(int argc, char *argv[]) {
 
   if (command == "--help" || command == "-h") {
     printHelp();
+    return 0;
+  }
+
+  // Handle serve command
+  if (command == "serve") {
+    LocalServer server(8080);
+    server.start();
     return 0;
   }
 

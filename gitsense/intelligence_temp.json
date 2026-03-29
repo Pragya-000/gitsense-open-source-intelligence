@@ -1,0 +1,25 @@
+{
+  "metrics": {
+    "total_files": 16,
+    "source_files": 2,
+    "lines_of_code": 39,
+    "code_quality_score": 100
+  },
+  "git_history": {
+    "total_commits": 4,
+    "top_contributors": [
+      {
+        "name": "Pragya Ahlawat",
+        "commits": 3
+      },
+      {
+        "name": "Pragya-000",
+        "commits": 1
+      }
+    ]
+  },
+  "architecture_smells": [
+  ],
+  "security_issues": [
+  ]
+}

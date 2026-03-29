@@ -23,10 +23,14 @@ set(SOURCES
     src/DependencyAnalyzer.cpp
     src/ReportGenerator.cpp
     src/AIRemediation.cpp
+    src/LocalServer.cpp
+    src/RepoAssistantEngine.cpp
 )
 
 # Create executable
 add_executable(gitsense ${SOURCES})
 
 # Target options
-# target_link_libraries(gitsense pthread) 
+if(WIN32)
+    target_link_libraries(gitsense ws2_32)
+endif()

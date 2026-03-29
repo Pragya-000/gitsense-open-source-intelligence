@@ -12,8 +12,9 @@ public:
   int getLargeFiles() const;
 
 private:
-  int score = 100;
   int todosFound = 0;
   int longFunctions = 0;
   int largeFiles = 0;
+  int totalLines = 0;
+  int totalFiles = 0;
 };
